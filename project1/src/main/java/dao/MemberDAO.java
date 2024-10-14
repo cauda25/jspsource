@@ -5,7 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import dto.ChangeDTO;
 import dto.MemberDTO;
 
 // ~~~DAO : DB 서버와 연동해서 DB 작업 담당하는 클래스
@@ -98,8 +101,33 @@ public class MemberDAO {
 		}
 		return result; 
 	}
-	public void read() {
-		
+	public List<MemberDTO> read() {
+		// 전체 회원 조회
+		List<MemberDTO> list = new ArrayList<>();
+		try {
+			
+			con = getConnection();
+			String sql ="SELECT USERID,NAME,AGE,EMAIL FROM USERTBL u ";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				// 컬럼에서 값을 꺼내서 DTO 에 담기
+				MemberDTO dto = new MemberDTO();
+				dto.setUserid(rs.getString("userid"));
+				dto.setName(rs.getString("name"));
+				dto.setAge(rs.getInt("age"));
+				dto.setEmail(rs.getString("email"));
+				
+				// List 에 추가
+				list.add(dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			close(con,pstmt,rs);
+		}
+		return list;
 	}
 	public MemberDTO login(MemberDTO dto) {
 		MemberDTO loginDto = null;
@@ -128,11 +156,41 @@ public class MemberDAO {
 		}
 		return loginDto;
 	}
-	public void update() {
-		
+	public int update(ChangeDTO changeDTO) {
+		//비밀번호 변경
+		int updateRow = 0;
+		try {
+			con = getConnection();
+			String sql = "UPDATE USERTBL SET PASSWORD = ? WHERE userid=? AND password=?";
+			pstmt =con.prepareStatement(sql);
+			pstmt.setString(1, changeDTO.getChangePassword());
+			pstmt.setString(2, changeDTO.getUserid());
+			pstmt.setString(3, changeDTO.getCurentPassword());
+			
+			updateRow = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(con,pstmt);
+		}
+		return updateRow;
 	}
-	public void delete() {
-		
+	public int delete(String userid,String password) {
+		int deleteRow = 0;
+		try {
+			con = getConnection();
+			String sql = "DELETE FROM usertbl WHERE userid=? AND password=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,userid);
+			pstmt.setString(2,password);
+			
+			deleteRow = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(con,pstmt);
+		}
+		return deleteRow;
 	}
 	
 }
