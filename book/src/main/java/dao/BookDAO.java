@@ -96,7 +96,7 @@ public class BookDAO {
 		List<BookDTO> list = new ArrayList<BookDTO>();
 		try {
 			con = getConnection();
-			String sql = "SELECT * FROM BOOKTBL b";
+			String sql = "SELECT * FROM BOOKTBL b order by code asc";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
