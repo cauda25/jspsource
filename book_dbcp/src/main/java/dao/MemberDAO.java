@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 import dto.BookDTO;
 import dto.ChangeDTO;
 import dto.MemberDTO;
@@ -18,24 +22,28 @@ public class MemberDAO {
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 
-	// 드라이버 로드
-	static {
-		try {
-			Class.forName("oracle.jdbc.OracleDriver");
+//	// 드라이버 로드
+//	static {
+//		try {
+//			Class.forName("oracle.jdbc.OracleDriver");
+//
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
-		} catch (ClassNotFoundException e) {
+	public Connection getConnection(){
+		Context initContext;
+		try {
+			initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			DataSource ds = (DataSource)envContext.lookup("jdbc/oracle");
+			con = ds.getConnection();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return con;
 	}
-
-	public Connection getConnection() throws SQLException {
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "c##java";
-		String password = "12345";
-
-		return DriverManager.getConnection(url, user, password);
-	}
-
 	public void close(Connection con, PreparedStatement pstmt) {
 		try {
 			if (pstmt != null)
