@@ -18,12 +18,15 @@ public class BookReadAction implements Action {
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 1. 가져오기
-		int code = Integer.parseInt(request.getParameter("code"));		
+		int code = Integer.parseInt(request.getParameter("code"));	
+		String keyword = request.getParameter("keyword");
 		// 2. service 호출
 		BookService service = new BookServiceImpl();
 		BookDTO dto = service.read(code);
 		
+		
 		request.setAttribute("dto", dto);
+		request.setAttribute("keyword", keyword);
 		
 		// request.setAttribute => forward => false
 		return new ActionForward(path, false);

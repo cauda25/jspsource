@@ -102,12 +102,13 @@ public class BookDAO {
 	}
 	
 	
-	public List<BookDTO> getList(){
+	public List<BookDTO> getList(String keyword){
 		List<BookDTO> list = new ArrayList<BookDTO>();
 		try {
 			con = getConnection();
-			String sql = "SELECT * FROM BOOKTBL b order by code asc";
+			String sql = "SELECT * FROM BOOKTBL b where writer || TITLE LIKE ? order by code asc";
 			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, "%"+keyword+"%");
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()) {

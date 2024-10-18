@@ -38,6 +38,4 @@ document.querySelector("body div:nth-child(3) form").addEventListener("submit", 
 	// 이상이 없는 경우 form 전송
 	e.target.submit();
 });
-document.querySelector(".btn-primary").addEventListener("click", () => {
-	location.href = "list_pro.jsp";
-});
+

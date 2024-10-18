@@ -3,11 +3,11 @@
  */
 // 목록 클릭 시 리스트로 이동
 document.querySelector(".btn-primary").addEventListener("click",()=>{
-	location.href = "/list.do";
+	location.href = "/list.do?keyword="+keyword;
 });
 
 document.querySelector(".btn-danger").addEventListener("click",()=>{
-	location.href = "delete_pro.jsp?code="+code;
+	location.href = "/delete.do?code="+code+"&keyword="+keyword;
 });
 // 수정 클릭 시 price의 값이 숫자가 들어있는지 확인
 document.querySelector("body div:nth-child(3) form").addEventListener("submit",(e)=>{

@@ -1,5 +1,6 @@
 package action;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,18 +23,23 @@ public class BookUpdateAction implements Action {
 		BookDTO dto = new BookDTO();
 		dto.setCode(Integer.parseInt(request.getParameter("code")));
 		dto.setPrice(Integer.parseInt(request.getParameter("price")));
-		dto.setDescription(request.getParameter("description"));	
+		dto.setDescription(request.getParameter("description"));
+		
+		// 검색 시 추가
+		String keyword = request.getParameter("keyword");
+		
 		// 2. service 호출
 		BookService service = new BookServiceImpl();
 		boolean updateRow = service.update(dto);
 		
-		if(updateRow == false) {
-			response.sendRedirect("/modify.do?code="+ dto.getCode());
+		if(updateRow) {
+			// 1 리턴 상세조회
+			path += "?code="+ dto.getCode()+"&keyword="+URLEncoder.encode(keyword, "utf-8");
 		} else {
-			response.sendRedirect("/list.do");
+			// 0 리턴 수정 페이지
+			path = "/modify.do?code="+ dto.getCode()+"&keyword="+URLEncoder.encode(keyword, "utf-8");
 		}
 		
-		// response.sendRedirect => forward => true
 		return new ActionForward(path, true);
 	}
 

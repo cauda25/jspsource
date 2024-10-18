@@ -1,5 +1,6 @@
 package action;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,25 +12,27 @@ import service.BookService;
 import service.BookServiceImpl;
 
 @AllArgsConstructor
-public class BookListAction implements Action {
+public class BookDeleteAction implements Action {
 
 	private String path;
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		// 1. 검색에서 오는 경우
-		String keyword = request.getParameter("keyword");
 		
+		// 1. 가져오기
+		int code = Integer.parseInt(request.getParameter("code"));
+		String keyword = request.getParameter("keyword");
 		// 2. service 호출
 		BookService service = new BookServiceImpl();
-		List<BookDTO> list =  service.list(keyword);
+		boolean deleteRow = service.delete(code);
 		
-		request.setAttribute("list",list);
-		request.setAttribute("keyword",keyword);
+		if(!deleteRow) {
+			path = "/modify.do?code="+code;
+		} else {
+			path += "?keyword="+URLEncoder.encode(keyword, "utf-8");
+		}
 		
-		// request.setAttribute => forward => false
-		return new ActionForward(path, false);
+		return new ActionForward(path, true);
 	}
 
 }
