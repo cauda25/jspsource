@@ -2,14 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="../include/header.jsp"%>
 <div class="dontainer-fluid">
-	<h1 class="h3 mb-4 text-gray-800">Create</h1>
-	<%--
-	 enctype="application/x-www-form-urlencoded"(기본)
-	 
-	 첨부파일
-	 enctype="multipart/form-data"	
-	--%>
-	<form method="post" action="/create.do" enctype="multipart/form-data">
+	<h1 class="h3 mb-4 text-gray-800">Reply</h1>
+	<form method="post" action="/reply.do">
 		<div class="form-group">
 			<label for="title">제목</label> <input type="text" class="form-control"
 				id="title" name="title" required="required">
@@ -22,10 +16,6 @@
 		<div class="form-group">
 			<label for="name">작성자</label> <input type="text" class="form-control"
 				id="name" name="name" required="required">
-		</div>
-		<div class="form-group">
-			<label for="fileF">첨부파일</label> <input type="file"
-				class="form-control" id="fileF" name="fileF">
 		</div>
 		<div class="form-group">
 			<label for="password">비밀번호</label> <input type="password"

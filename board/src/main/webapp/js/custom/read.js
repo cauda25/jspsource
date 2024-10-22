@@ -1,6 +1,19 @@
 // 목록 클릭시
 // actionForm action="list.do" 수정 후 submit
 const aff = document.querySelector("#actionForm");
+
+// read.jdp 수정, 목록 버튼 이벤트
+// read.jsp 에서 수정 클릭시
+// actionForm action="modify.do" 수정 후 submitc
+const ibt = document.querySelector("#readForm .btn-info")
+if(ibt){
+ibt.addEventListener("click", () => {
+	// 값이 있다면 실행
+	aff.action = "/modify.do";
+	aff.submit();
+});
+}
+
 document.querySelector("#readForm .btn-success").addEventListener("click", () => {
 	// actionForm bno 요소 제거
 	aff.querySelector("[name='bno']").remove();
@@ -9,13 +22,17 @@ document.querySelector("#readForm .btn-success").addEventListener("click", () =>
 	aff.submit();
 })
 
-// read.jsp 에서 수정 클릭시
-// actionForm action="modify.do" 수정 후 submit
-document.querySelector("#readForm .btn-primary").addEventListener("click", () => {
-	// 값이 있다면 실행
-	aff.action = "/modify.do";
-	aff.submit();
-})
+// modify.jdp 수정, 삭제 버튼 이벤트
+// 삭제 클릭 시
+// readForm actoin => delete.do 변경 후 submit
+const rbt = document.querySelector(".btn-danger")
+if(rbt){
+rbt.addEventListener("click", () => {
+	rff.action = "/delete.do";
+	rff.submit();
+});
+}
+
 
 // modify.jsp 에서 수정 클릭시 (submit) => sunbmit 중지
 // readForm password,title,content 값이 있는 지확인하고 
@@ -39,13 +56,9 @@ rff.addEventListener("submit", (e) => {
 		ps.focus();
 		return;
 	}
-})
-
-// 삭제 클릭 시
-// readForm actoin => delete.do 변경 후 submit
-document.querySelector(".btn-danger").addEventListener("click", () => {
-	rff.action = "/delete.do";
+	
 	rff.submit();
-})
+	})
+
 
 

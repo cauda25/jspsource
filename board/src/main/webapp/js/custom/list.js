@@ -23,13 +23,13 @@ document.querySelector("tbody").addEventListener("click",(e)=>{
 	
 	const bno = e.target.getAttribute("href");
 	
-	actionForm.querySelector("[name='bno']").value = bno;
+	af.querySelector("[name='bno']").value = bno;
 	
 	// 삽입 후 확인
-	console.log(actionForm.innerHTML);
+	console.log(af.innerHTML);
 	
 	// actionForm submit
 	// action : /read.do 변경
-	af.action = "/read.do"
+	af.action = "/cntUpdate.do"
 	af.submit();
 	});

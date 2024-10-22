@@ -61,7 +61,7 @@ public class BoradDAO {
 		List<BoardDTO> list = new ArrayList<BoardDTO>();
 		try {
 			con = getConnection();
-			String spl = "select bno,name,title,readcnt,regdate from board  order by bno desc";
+			String spl = "select bno,name,title,readcnt,regdate,re_lev from board  order by RE_REF DESC, RE_SEQ ASC";
 			pstmt = con.prepareStatement(spl);
 			rs = pstmt.executeQuery();
 
@@ -72,6 +72,7 @@ public class BoradDAO {
 				dto.setTitle(rs.getString("title"));
 				dto.setReadcnt(rs.getInt("readcnt"));
 				dto.setRegdate(rs.getDate("regdate"));
+				dto.setReLev(rs.getInt("re_lev"));
 
 				list.add(dto);
 			}
@@ -117,13 +118,84 @@ public class BoradDAO {
 			pstmt.setString(2, updateDto.getContent());
 			pstmt.setInt(3, updateDto.getBno());
 			pstmt.setString(4, updateDto.getPassword());
-			
+
 			updateRow = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			close(con,pstmt);
+			close(con, pstmt);
 		}
 		return updateRow;
 	}
+
+	public int delete(BoardDTO deleteDto) {
+		int deleteRow = 0;
+		try {
+			con = getConnection();
+			String sql = "delete from board where bno = ? and password = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, deleteDto.getBno());
+			pstmt.setString(2, deleteDto.getPassword());
+			deleteRow = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(con, pstmt);
+		}
+		return deleteRow;
+	}
+
+	public int create(BoardDTO insertDto) {
+		int insertRow=0;
+		int bno=0;
+		try {
+			con = getConnection();
+//			String sql = "select board_seq.naxtval from dual";
+//			pstmt = con.prepareStatement(sql);
+//			rs = pstmt.executeQuery();
+//			if(rs.next()) {
+//				bno =rs.getInt(1);
+//			}
+//			sql = "insert into board(bno,name,password,title,content,re_ref,re_lev,re_seq) values(?,?,?,?,?,?,0,0)";
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setInt(1, bno);
+//			pstmt.setString(1, insertDto.getName());
+//			pstmt.setString(2, insertDto.getPassword());
+//			pstmt.setString(3, insertDto.getTitle());
+//			pstmt.setString(4, insertDto.getContent());
+//			pstmt.setInt(6, bno);
+			
+			String sql = "insert into board(bno,name,password,title,content,file_f,re_ref,re_lev,re_seq) values(board_seq.nextval,?,?,?,?,?,board_seq.currval,0,0)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, insertDto.getName());
+			pstmt.setString(2, insertDto.getPassword());
+			pstmt.setString(3, insertDto.getTitle());
+			pstmt.setString(4, insertDto.getContent());
+			pstmt.setString(5, insertDto.getFileF());
+			
+			insertRow = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(con, pstmt);
+		}
+		return insertRow;
+	}
+	
+	public int updateRead(int bno) {
+		int updateReadRow=0;
+		try {
+			con = getConnection();
+			String sql = "UPDATE BOARD SET READCNT = READCNT +1 WHERE bno=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			updateReadRow = pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			close(con,pstmt);
+		}
+		return updateReadRow;
+	}
+	
 }

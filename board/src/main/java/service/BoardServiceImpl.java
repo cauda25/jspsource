@@ -26,13 +26,18 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public boolean delete(int bno) {
-		return false;
+	public boolean delete(BoardDTO deleteDto) {
+		return dao.delete(deleteDto)==1?true:false;
 	}
 
 	@Override
 	public boolean create(BoardDTO insertDto) {
-		return false;
+		return dao.create(insertDto)==1?true:false;
+	}
+
+	@Override
+	public boolean hitUpdate(int bno) {
+		return dao.updateRead(bno)==1?true:false;
 	}
 
 }
