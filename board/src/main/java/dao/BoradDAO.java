@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.BoardDTO;
+import dto.PageDTO;
+import dto.SearchDTO;
 
 public class BoradDAO {
 	private Connection con;
@@ -57,12 +59,39 @@ public class BoradDAO {
 		}
 	}
 
-	public List<BoardDTO> getList() {
+	public List<BoardDTO> getList(SearchDTO sDto) {
 		List<BoardDTO> list = new ArrayList<BoardDTO>();
+		// 시작번호
+		int start = sDto.getPage() * sDto.getAmount();
+		// 끝번호
+		int end = (sDto.getPage()-1) * sDto.getAmount();
+		
 		try {
 			con = getConnection();
-			String spl = "select bno,name,title,readcnt,regdate,re_lev from board  order by RE_REF DESC, RE_SEQ ASC";
-			pstmt = con.prepareStatement(spl);
+			String sql = "select bno,name,title,readcnt,regdate,re_lev ";
+			sql += "FROM (SELECT rownum rnum,bno,name,title,readcnt,regdate,re_lev ";
+			sql += "FROM (SELECT bno,name,title,readcnt,regdate,re_lev from board ";
+			
+			
+			if(!sDto.getCriteria().isBlank()) {
+				sql += "where "+sDto.getCriteria()+ " LIKE ? order by RE_REF DESC, RE_SEQ ASC) ";
+				sql += "WHERE rownum <= ?) ";
+				sql += "WHERE rnum > ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, "%"+sDto.getKeyword()+"%");
+				pstmt.setInt(2, start);
+				pstmt.setInt(3, end);
+			}else {
+				sql += " order by RE_REF DESC, RE_SEQ ASC) ";
+				sql += "WHERE rownum <= ?) ";
+				sql += "WHERE rnum > ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, start);
+				pstmt.setInt(2, end);
+			}
+//			String spl = "select bno,name,title,readcnt,regdate,re_lev from board where TITLE || CONTENT || NAME LIKE ? order by RE_REF DESC, RE_SEQ ASC";
+//			pstmt = con.prepareStatement(spl);
+//			pstmt.setString(1, "%"+sDto.getKeyword()+"%");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -99,6 +128,11 @@ public class BoradDAO {
 				dto.setTitle(rs.getString("title"));
 				dto.setContent(rs.getString("content"));
 				dto.setFileF(rs.getString("file_f"));
+				
+				// 댓글에 필요한 정보 담기
+				dto.setReRef(rs.getInt("re_ref"));
+				dto.setReLev(rs.getInt("re_lev"));
+				dto.setReSeq(rs.getInt("re_seq"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -196,6 +230,61 @@ public class BoradDAO {
 			close(con,pstmt);
 		}
 		return updateReadRow;
+	}
+	
+	public int replyInsert(BoardDTO replyDto) {
+		int insertRow=0;
+		
+		// 부모글 정보
+		int bno= replyDto.getBno();
+		int reRef = replyDto.getReRef();
+		int reLev = replyDto.getReLev();
+		int reSeq = replyDto.getReSeq();
+		try {
+			con = getConnection();
+			String sql = "UPDATE BOARD SET RE_SEQ = RE_SEQ +1 WHERE RE_REF=? AND RE_SEQ > ? ";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, reRef);
+			pstmt.setInt(2, reSeq);
+			
+			pstmt.executeUpdate();
+			
+			sql = "insert into board(bno,name,password,title,content,re_ref,re_lev,re_seq) values(board_seq.nextval,?,?,?,?,?,?,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, replyDto.getName());
+			pstmt.setString(2, replyDto.getPassword());
+			pstmt.setString(3, replyDto.getTitle());
+			pstmt.setString(4, replyDto.getContent());
+			pstmt.setInt(5, reRef);
+			pstmt.setInt(6, reLev + 1);
+			pstmt.setInt(7, reSeq + 1);
+			
+			insertRow = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(con, pstmt);
+		}
+		return insertRow;
+	}
+	
+	// 전체 게시물 개수 리턴 메소드
+	public int getTogalRows() {
+		int total = 0;
+		try {
+			con = getConnection();
+			String sql = "select count(*) from board";
+			pstmt = con.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(con,pstmt,rs);
+		}
+		return total;
 	}
 	
 }

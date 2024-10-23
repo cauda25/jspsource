@@ -4,6 +4,7 @@ import java.util.List;
 
 import dao.BoradDAO;
 import dto.BoardDTO;
+import dto.SearchDTO;
 
 
 
@@ -11,8 +12,8 @@ public class BoardServiceImpl implements BoardService {
 
 	private BoradDAO dao = new BoradDAO();
 	@Override
-	public List<BoardDTO> listAll() {
-		return dao.getList();
+	public List<BoardDTO> listAll(SearchDTO sDto) {
+		return dao.getList(sDto);
 	}
 
 	@Override
@@ -38,6 +39,16 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean hitUpdate(int bno) {
 		return dao.updateRead(bno)==1?true:false;
+	}
+
+	@Override
+	public boolean reply(BoardDTO replyDto) {
+		return dao.replyInsert(replyDto)==1?true:false;
+	}
+
+	@Override
+	public int getTogalRows() {
+		return dao.getTogalRows();
 	}
 
 }

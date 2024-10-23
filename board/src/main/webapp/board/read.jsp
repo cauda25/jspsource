@@ -22,12 +22,12 @@
 		<div class="form-group">
 			<label for="fileF">첨부파일</label>
 			<%
-				BoardDTO dto = (BoardDTO)request.getAttribute("read");
-				String encodeFileName ="";
-					
-				if(dto.getFileF() != null){
-					encodeFileName = URLEncoder.encode(dto.getFileF(),"utf-8");
-				}
+			BoardDTO dto = (BoardDTO) request.getAttribute("read");
+			String encodeFileName = "";
+
+			if (dto.getFileF() != null) {
+				encodeFileName = URLEncoder.encode(dto.getFileF(), "utf-8");
+			}
 			%>
 			<div>
 				<a href="/board/download.jsp?fileName=<%=encodeFileName%>">${read.fileF}</a>
@@ -38,8 +38,7 @@
 				id="name" name="name" value="${read.name}" readonly>
 		</div>
 		<button type="button" class="btn btn-info">수정</button>
-		<!-- <button type="button" class="btn btn-secondary">답변</button> -->
-		<a class="btn btn-secondary" href="/board/reply.jsp">답변</a>
+		<button type="button" class="btn btn-secondary">답변</button>
 		<button type="button" class="btn btn-success">목록</button>
 	</form>
 </div>

@@ -22,6 +22,16 @@ document.querySelector("#readForm .btn-success").addEventListener("click", () =>
 	aff.submit();
 })
 
+// 답변 클릭 시 actionForm action="reply.do" 수정 후 submit
+const rvbt = document.querySelector("#readForm .btn-secondary")
+if(rvbt){
+rvbt.addEventListener("click", () => {
+	// 값이 있다면 실행
+	aff.action = "/replyView.do";
+	aff.submit();
+});
+}
+
 // modify.jdp 수정, 삭제 버튼 이벤트
 // 삭제 클릭 시
 // readForm actoin => delete.do 변경 후 submit
