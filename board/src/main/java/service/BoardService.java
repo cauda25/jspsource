@@ -15,5 +15,5 @@ public interface BoardService {
 	boolean create(BoardDTO insertDto);
 	boolean hitUpdate(int bno);
 	boolean reply(BoardDTO replyDto);
-	int getTogalRows();
+	int getTogalRows(SearchDTO sDto);
 }

@@ -47,8 +47,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int getTogalRows() {
-		return dao.getTogalRows();
+	public int getTogalRows(SearchDTO sDto) {
+		return dao.getTogalRows(sDto);
 	}
 
 }

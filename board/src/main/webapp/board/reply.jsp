@@ -22,6 +22,10 @@
 				class="form-control" id="password" name="password"
 				required="required">
 		</div>
+		<input type="hidden" name="page" value="${sDto.page}" />
+		<input type="hidden" name="amount" value="${sDto.amount}" />
+		<input type="hidden" name="criteria" value="${sDto.criteria}" />
+		<input type="hidden" name="keyword" value="${sDto.keyword}" />
 		<!-- 부모글 정보 -->
 		<input type="hidden" name="reRef" value="${read.reRef}" />
 		<input type="hidden" name="reLev" value="${read.reLev}" />
@@ -32,6 +36,11 @@
 	</form>
 </div>
 <form action="" method="get" id="actionForm">
+<input type="hidden" name="bno" value="${read.bno}" />
+	<input type="hidden" name="page" value="${sDto.page}" />
+	<input type="hidden" name="amount" value="${sDto.amount}" />
+	<input type="hidden" name="criteria" value="${sDto.criteria}" />
+	<input type="hidden" name="keyword" value="${sDto.keyword}" />
 </form>
 <script src="/js/custom/reply.js"></script>
 <%@ include file="../include/footer.jsp"%>

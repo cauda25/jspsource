@@ -6,6 +6,8 @@
 	<div class="card shadow mb-4">
 		<div class="card-header py-3">
 			<form action="/list.do" id="searchForm">
+					<input type="hidden" name="page" value="${pDto.serDTO.page}" />
+					<input type="hidden" name="amount" value="${pDto.serDTO.amount}" />
 				<select name="criteria" id="criteria" class="form-select">
 					<option value="n"
 						<c:out value="${sdto.criteria == null?'selected':''}"/>>-------</option>
@@ -15,8 +17,8 @@
 						<c:out value="${sdto.criteria == null?'selected':''}"/>>content</option>
 					<option value="name"
 						<c:out value="${sdto.criteria == null?'selected':''}"/>>name</option>
-				</select> <input type="text" name="keyword" id="keyword"
-					value="${sdto.keyword}" />
+				</select> 
+				<input type="text" name="keyword" id="keyword" value="${sdto.keyword}" />
 				<button type="submit" class="btn btn-warning">검색</button>
 			</form>
 

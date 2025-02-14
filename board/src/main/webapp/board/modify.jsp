@@ -30,6 +30,10 @@
 				<a href="">${read.fileF}</a>
 			</div>
 		</div>
+		<input type="hidden" name="page" value="${sDto.page}" />
+		<input type="hidden" name="amount" value="${sDto.amount}" />
+		<input type="hidden" name="criteria" value="${sDto.criteria}" />
+		<input type="hidden" name="keyword" value="${sDto.keyword}" />
 		<button type="submit" class="btn btn-primary">수정</button>
 		<button type="button" class="btn btn-danger">삭제</button>
 		<button type="button" class="btn btn-success">목록</button>
@@ -38,6 +42,10 @@
 
 <form action="" method="get" id="actionForm">
 	<input type="hidden" name="bno" value="${read.bno}" />
+	<input type="hidden" name="page" value="${sDto.page}" />
+	<input type="hidden" name="amount" value="${sDto.amount}" />
+	<input type="hidden" name="criteria" value="${sDto.criteria}" />
+	<input type="hidden" name="keyword" value="${sDto.keyword}" />
 </form>
 <script src="/js/custom/read.js"></script>
 <%@ include file="../include/footer.jsp"%>

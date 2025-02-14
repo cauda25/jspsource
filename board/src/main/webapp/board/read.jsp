@@ -37,6 +37,10 @@
 			<label for="name">작성자</label> <input type="text" class="form-control"
 				id="name" name="name" value="${read.name}" readonly>
 		</div>
+		<input type="hidden" name="page" value="${sDto.page}" />
+		<input type="hidden" name="amount" value="${sDto.amount}" />
+		<input type="hidden" name="criteria" value="${sDto.criteria}" />
+		<input type="hidden" name="keyword" value="${sDto.keyword}" />
 		<button type="button" class="btn btn-info">수정</button>
 		<button type="button" class="btn btn-secondary">답변</button>
 		<button type="button" class="btn btn-success">목록</button>
@@ -44,6 +48,10 @@
 </div>
 <form action="" method="get" id="actionForm">
 	<input type="hidden" name="bno" value="${read.bno}" />
+	<input type="hidden" name="page" value="${sDto.page}" />
+	<input type="hidden" name="amount" value="${sDto.amount}" />
+	<input type="hidden" name="criteria" value="${sDto.criteria}" />
+	<input type="hidden" name="keyword" value="${sDto.keyword}" />
 </form>
 <script src="/js/custom/read.js"></script>
 <%@ include file="../include/footer.jsp"%>

@@ -1,5 +1,6 @@
 package action;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,13 +30,13 @@ public class BoardListAction implements Action {
 		
 		// 검색 추가
 		String criteria = request.getParameter("criteria");
-		String keyword = request.getParameter("keyword");
+		String keyword = URLEncoder.encode(request.getParameter("keyword"), "utf-8") ;
 		SearchDTO sDto = new SearchDTO(criteria,keyword,page,amount);
 		
 		BoardService service = new BoardServiceImpl();
 		List<BoardDTO> list = service.listAll(sDto);
 		
-		int total = service.getTogalRows();
+		int total = service.getTogalRows(sDto);
 		PageDTO pDto = new PageDTO(sDto, total);
 		
 		// list => board 테이브 내용
